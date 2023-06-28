@@ -16,14 +16,37 @@ function ModeSelect() {
 
   return (
     <>
-      <FormControl size="small">
-        <InputLabel id="demo-simple-select-label">Mode</InputLabel>
+      <FormControl
+        size="small"
+        sx={{
+          minWidth:'120px',
+          '& .MuiOutlinedInput-root': {
+            '& fieldset':{
+              borderColor:'white'
+            }
+          }
+        }}>
+        <InputLabel id="demo-simple-select-label"
+          sx={{
+            color:'white',
+            '&.Mui-focused':{ color:'white' }
+          }}>
+          Mode
+        </InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={mode}
           label="Age"
           onChange={handleChange}
+          sx={{
+            color:'white',
+            '.MuiSvgIcon-root':{ color:'white' },
+            '.MuiOutlinedInput-notchedOutline':{ borderColor:'white' },
+            '&:hover .MuiOutlinedInput-notchedOutline':{ borderColor:'white' },
+            '&.Mui-focused .MuiOutlinedInput-notchedOutline':{ borderColor:'white' }
+
+          }}
         >
           <MenuItem value="light">
             <Box style={{ display:'flex', alignItems: 'center', gap:'8px' }}>

@@ -25,7 +25,7 @@ function Profile() {
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar sx={{ width: 32, height: 32 }}
+          <Avatar sx={{ width: 34, height: 34 }}
             src='https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-6/334494904_909968490428262_1880365116923209069_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=Laf0YvXNNdQAX_685kq&_nc_ht=scontent.fdad3-4.fna&oh=00_AfBgceWtXoPTCMnd4C2oQqXLQR7qrp9c1-qSQymINL6NOw&oe=64957D3A'
             alt='Quang Minh'
           >
