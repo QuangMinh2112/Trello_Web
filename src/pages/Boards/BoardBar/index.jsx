@@ -8,6 +8,7 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import Avatar from '@mui/material/Avatar'
 import AvatarGroup from '@mui/material/AvatarGroup'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import { capitalizedFirstLetter } from '~/utils/constanst'
 
 const BoardBarStyles = {
   color:'white',
@@ -22,7 +23,7 @@ const BoardBarStyles = {
     backgroundColor:'primary.50'
   }
 }
-function BoardBar() {
+function BoardBar({ board }) {
   return (
     <Box sx=
       {{
@@ -35,8 +36,8 @@ function BoardBar() {
         overflowX:'auto',
         paddingX:2,
         borderBottom:'1px solid white',
-        backgroundColor:(theme) => theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'
-
+        backgroundColor:(theme) => theme.palette.mode === 'dark' ? '#34495e' : '#1976d2',
+        '&::-webkit-scrollbar-track':{ m:2 }
       }}>
       <Box
         sx={{ display:'flex', alignItems:'center', gap:2 }}
@@ -49,7 +50,7 @@ function BoardBar() {
         />
         <Chip
           icon={<VpnLockIcon />}
-          label="Public/Private Workspace"
+          label={capitalizedFirstLetter(board.type)}
           sx={BoardBarStyles}
           clickable
         />
@@ -103,7 +104,7 @@ function BoardBar() {
           <Tooltip title='quangminh'>
             <Avatar
               alt='Remy Sharp'
-              src='https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-6/334494904_909968490428262_1880365116923209069_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=Laf0YvXNNdQAX_685kq&_nc_ht=scontent.fdad3-4.fna&oh=00_AfBgceWtXoPTCMnd4C2oQqXLQR7qrp9c1-qSQymINL6NOw&oe=64957D3A' />
+              src='https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-6/334494904_909968490428262_1880365116923209069_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=GxuY1GgGvXgAX9wppBp&_nc_ht=scontent.fdad3-4.fna&oh=00_AfBVgX3sElX8bCk6maZXyWFNvylZONsVleLFPr-dDNwW8g&oe=64B326FA' />
           </Tooltip>
           <Tooltip title='messi1'>
             <Avatar
