@@ -10,9 +10,13 @@ import {
   useSensors,
   DragOverlay,
   closestCorners,
-  defaultDropAnimationSideEffects
+  defaultDropAnimationSideEffects,
+  pointerWithin,
+  rectIntersection,
+  getFirstCollision,
+  closestCenter
 } from '@dnd-kit/core'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
 import Column from './ListColumns/Column/Column'
 import Card from './ListColumns/Column/ListCards/Card/Card'
@@ -37,11 +41,46 @@ function BoardContent({ board }) {
   const [activeDragItemData, setActiveDragItemData] = useState(null)
   const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] = useState(null)
 
+  //Điểm va chạm cuối cùng
+  const lastOverId = useRef(null)
+
   //Tìm id của column chứa Card
   const findColumnByCardId = (cardId) => {
     return orderedColumns?.find((column) => column.cards?.map((card) => card._id)?.includes(cardId))
   }
 
+  const collisionDetectionStrategy = useCallback(
+    (args) => {
+      if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+        return closestCorners({ ...args })
+      }
+      //Tìm các điểm giao nhau, va chạm - intersection với con trỏ
+      const pointerIntersections = pointerWithin(args)
+      //Thuật toán phát hiện va chạm và sẻ trả về mảng đã va chạm
+      const intersections = pointerIntersections?.length > 0 ? pointerIntersections : rectIntersection(args)
+
+      //tìm overId đầu tiền trong intersction ở trên
+      let overId = getFirstCollision(intersections, 'id')
+
+      if (overId) {
+        const checkColumn = orderedColumns.find((column) => column._id === overId)
+        if (checkColumn) {
+          //Ghì đè columnId thành card id bằng overId
+          overId = closestCenter({
+            ...args,
+            droppableContainers: args.droppableContainers.filter(
+              (container) => container.id !== overId && checkColumn?.cardOrderIds?.includes(container.id)
+            )
+          })[0]?.id
+        }
+        lastOverId.current = overId
+
+        return [{ id: overId }]
+      }
+      return lastOverId.current ? [{ id: lastOverId.current }] : []
+    },
+    [activeDragItemType, orderedColumns]
+  )
   const moveCardBetweenTwoColumns = (
     overColumn,
     overCardId,
@@ -206,7 +245,7 @@ function BoardContent({ board }) {
       onDragStart={handleDragStart}
       onDragOver={handleOnDragOver}
       sensors={sensors}
-      collisionDetection={closestCorners} // Thuật toán phát hiện va chạm(áp dụng cho card có hình ảnh)
+      collisionDetection={collisionDetectionStrategy} // Thuật toán phát hiện va chạm(áp dụng cho card có hình ảnh)
     >
       <Box
         sx={{
