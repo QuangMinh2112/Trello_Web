@@ -3,7 +3,6 @@ import ListColumns from './ListColumns/ListColumns'
 import { mapOrder } from '~/utils/sorts'
 import {
   DndContext,
-  PointerSensor,
   MouseSensor,
   TouchSensor,
   useSensor,
@@ -56,17 +55,19 @@ function BoardContent({ board }) {
       }
       //Tìm các điểm giao nhau, va chạm - intersection với con trỏ
       const pointerIntersections = pointerWithin(args)
+      // If pointerIntersections is empty array => return and not do anything
+      if (!pointerIntersections?.length) return
       //Thuật toán phát hiện va chạm và sẻ trả về mảng đã va chạm
-      const intersections = pointerIntersections?.length > 0 ? pointerIntersections : rectIntersection(args)
+      // const intersections = pointerIntersections?.length > 0 ? pointerIntersections : rectIntersection(args)
 
       //tìm overId đầu tiền trong intersction ở trên
-      let overId = getFirstCollision(intersections, 'id')
+      let overId = getFirstCollision(pointerIntersections, 'id')
 
       if (overId) {
         const checkColumn = orderedColumns.find((column) => column._id === overId)
         if (checkColumn) {
           //Ghì đè columnId thành card id bằng overId
-          overId = closestCenter({
+          overId = closestCorners({
             ...args,
             droppableContainers: args.droppableContainers.filter(
               (container) => container.id !== overId && checkColumn?.cardOrderIds?.includes(container.id)
