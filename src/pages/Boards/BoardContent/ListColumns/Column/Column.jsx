@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { memo, useState } from 'react'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
@@ -21,24 +21,27 @@ import { mapOrder } from '~/utils/sorts'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-
 function Column({ column }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
-    data:{ ...column }
+    data: { ...column }
   })
 
   const dntKitStyle = {
     transform: CSS.Translate.toString(transform),
     transition,
-    height:'100%',
-    opacity:isDragging ? 0.5 : ''
+    height: '100%',
+    opacity: isDragging ? 0.5 : ''
   }
 
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
-  const handleClick = (event) => {setAnchorEl(event.currentTarget)}
-  const handleClose = () => {setAnchorEl(null)}
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget)
+  }
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
   const orderedCards = mapOrder(column?.cards, column?.cardOrderIds, '_id')
   return (
@@ -46,31 +49,34 @@ function Column({ column }) {
       <Box
         {...listeners}
         sx={{
-          minWidth:'300px',
-          maxWidth:'300px',
-          backgroundColor:(theme) => theme.palette.mode === 'dark' ? '#333643' : '#ebecf0',
-          ml:2,
-          borderRadius:'5px',
-          outline:'none',
-          height:'fit-content',
-          cursor:'pointer',
-          maxHeight:(theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`
-        }}>
+          minWidth: '300px',
+          maxWidth: '300px',
+          backgroundColor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : '#ebecf0'),
+          ml: 2,
+          borderRadius: '5px',
+          outline: 'none',
+          height: 'fit-content',
+          cursor: 'pointer',
+          maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`
+        }}
+      >
         {/* Box Header */}
         <Box
           sx={{
-            height:(theme) => theme.trello.columnHeaderHeight,
-            display:'flex',
-            alignItems:'center',
-            justifyContent:'space-between',
-            p:2
+            height: (theme) => theme.trello.columnHeaderHeight,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            p: 2
           }}
         >
-          <Typography variant="h6" sx={{
-            fontWeight: 'bold',
-            fontSize: '1rem',
-            cursor: 'pointer'
-          }}
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 'bold',
+              fontSize: '1rem',
+              cursor: 'pointer'
+            }}
           >
             {column?.title}
           </Typography>
@@ -78,8 +84,8 @@ function Column({ column }) {
             <Tooltip title="More options">
               <KeyboardArrowDownIcon
                 sx={{
-                  color:'text.primary',
-                  cursor:'pointer'
+                  color: 'text.primary',
+                  cursor: 'pointer'
                 }}
                 id="basic-menu-column-dropdown"
                 aria-controls={open ? 'basic-menu' : undefined}
@@ -98,19 +104,27 @@ function Column({ column }) {
               }}
             >
               <MenuItem>
-                <ListItemIcon><AddCardIcon fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <AddCardIcon fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Add new card</ListItemText>
               </MenuItem>
               <MenuItem>
-                <ListItemIcon><ContentCut fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <ContentCut fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Cut</ListItemText>
               </MenuItem>
               <MenuItem>
-                <ListItemIcon><ContentCopy fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <ContentCopy fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Coppy</ListItemText>
               </MenuItem>
               <MenuItem>
-                <ListItemIcon><ContentPaste fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <ContentPaste fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Paste</ListItemText>
               </MenuItem>
               <Divider />
@@ -134,16 +148,16 @@ function Column({ column }) {
         {/* Box Footer */}
         <Box
           sx={{
-            height:(theme) => theme.trello.columnFooterHeight,
-            display:'flex',
-            alignItems:'center',
-            justifyContent:'space-between',
-            p:2
+            height: (theme) => theme.trello.columnFooterHeight,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            p: 2
           }}
         >
           <Button startIcon={<AddCardIcon />}>Add new card</Button>
           <Tooltip title="Drawer to move">
-            <DragHandleIcon sx={{ cursor:'pointer' }} />
+            <DragHandleIcon sx={{ cursor: 'pointer' }} />
           </Tooltip>
         </Box>
       </Box>
@@ -151,4 +165,4 @@ function Column({ column }) {
   )
 }
 
-export default Column
+export default memo(Column)

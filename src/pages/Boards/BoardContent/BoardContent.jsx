@@ -1,5 +1,7 @@
 import Box from '@mui/material/Box'
 import ListColumns from './ListColumns/ListColumns'
+import Column from './ListColumns/Column/Column'
+import Card from './ListColumns/Column/ListCards/Card/Card'
 import { mapOrder } from '~/utils/sorts'
 import {
   DndContext,
@@ -11,15 +13,12 @@ import {
   closestCorners,
   defaultDropAnimationSideEffects,
   pointerWithin,
-  rectIntersection,
-  getFirstCollision,
-  closestCenter
+  getFirstCollision
 } from '@dnd-kit/core'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { arrayMove } from '@dnd-kit/sortable'
-import Column from './ListColumns/Column/Column'
-import Card from './ListColumns/Column/ListCards/Card/Card'
-import { cloneDeep } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash'
+import { generatePlaceholderCard } from '~/utils/constanst'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -38,6 +37,7 @@ function BoardContent({ board }) {
   const [activeDragItemId, setActiveDragItemId] = useState(null)
   const [activeDragItemType, setActiveDragItemType] = useState(null)
   const [activeDragItemData, setActiveDragItemData] = useState(null)
+
   const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] = useState(null)
 
   //Điểm va chạm cuối cùng
@@ -103,14 +103,19 @@ function BoardContent({ board }) {
       const nextColumns = cloneDeep(prev)
       const nextActiveColumn = nextColumns?.find((column) => column._id === activeColumn._id)
       const nextOverColumn = nextColumns?.find((column) => column._id === overColumn._id)
-      // Cloumn cũ
 
+      // Cloumn cũ
       if (nextActiveColumn) {
         //Xóa card đang kéo từ column của nó khi kéo sang column mới
         nextActiveColumn.cards = nextActiveColumn?.cards?.filter((card) => card._id !== activeDragingCardId)
+        // Thêm FE_Placeholder vào nếu Card nằm trong column là 1 mảng rổng: Bị kéo hết đi và k còn cái nào
+        if (isEmpty(nextActiveColumn?.cards)) {
+          nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)]
+        }
         //Cập nhật lại Id của trong column
         nextActiveColumn.cardOrderIds = nextActiveColumn?.cards?.map((card) => card._id)
       }
+
       //Column mới
       if (nextOverColumn) {
         // Kiểm tra xem card đang kéo nó có tồn tại trong OverCloumn hay chưa => nếu tồn tại thì xóa nó đi
@@ -120,6 +125,9 @@ function BoardContent({ board }) {
           ...activeDragingCardData,
           columnId: nextOverColumn._id
         })
+        // Xóa placeholder card đi nếu nó đang tồn tại khi mảng từ rổng cho đến có 1 hoặc nhiều item kéo vào
+        nextOverColumn.cards = nextOverColumn.cards?.filter((card) => !card.FE_Placeholder)
+
         //Cập nhật lại Id của trong column
         nextOverColumn.cardOrderIds = nextOverColumn?.cards?.map((card) => card._id)
       }
@@ -263,7 +271,9 @@ function BoardContent({ board }) {
         <DragOverlay dropAnimation={dropAnimation}>
           {!activeDragItemType && null}
           {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && <Column column={activeDragItemData} />}
-          {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && <Card card={activeDragItemData} />}
+          {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && (
+            <Card card={activeDragItemData} activeDragItemId={activeDragItemId} />
+          )}
         </DragOverlay>
       </Box>
     </DndContext>

@@ -9,15 +9,17 @@ import CommentIcon from '@mui/icons-material/Comment'
 import AttachmentIcon from '@mui/icons-material/Attachment'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { memo } from 'react'
 
-function Card({ card }) {
+function Card({ card, activeDragItemId }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card._id,
     data: { ...card }
   })
+  const checkForcusCard = card._id === activeDragItemId
 
   const dntKitCardStyle = {
-    transform: CSS.Translate.toString(transform),
+    transform: checkForcusCard ? 'rotate(4deg)' : CSS.Translate.toString(transform),
     transition,
     opacity: isDragging ? 0.5 : '',
     border: isDragging ? '#3498db 1px solid' : ''
@@ -36,7 +38,8 @@ function Card({ card }) {
       sx={{
         cursor: 'pointer',
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
-        overflow: 'unset'
+        overflow: 'unset',
+        display: card?.FE_Placeholder ? 'none' : 'block'
       }}
     >
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} title="green iguana" />}
@@ -72,4 +75,4 @@ function Card({ card }) {
   )
 }
 
-export default Card
+export default memo(Card)
