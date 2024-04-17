@@ -16,6 +16,7 @@ import { NavLink } from 'react-router-dom'
 // eslint-disable-next-line react-refresh/only-export-components
 const Login = ({ navigate, dispatch }) => {
   const [errorMessage, setErrorMessage] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const formik = useFormik({
     initialValues: {
@@ -24,7 +25,9 @@ const Login = ({ navigate, dispatch }) => {
     },
     validationSchema: authLoginSchema,
     onSubmit: async (values) => {
+      setLoading(true)
       const response = await apiLoginUser(values)
+      setLoading(false)
       if (response.message === 'Login successful!') {
         dispatch(
           login({
@@ -179,8 +182,9 @@ const Login = ({ navigate, dispatch }) => {
               variant="contained"
               sx={{ color: '#fff', background: '#1976d2', padding: '10px 16px' }}
               type="submit"
+              disabled={loading}
             >
-              Login
+              {loading ? 'Loading...' : 'Login'}
             </Button>
           </Box>
         </form>

@@ -12,12 +12,14 @@ import { authSelector } from './redux/auth/auth.selector'
 import PrivateRoute from './components/PrivateRouter'
 import Register from './pages/Auth/Register'
 
-function App({ dispatch }) {
+function App({ dispatch, location }) {
   const { userInfo } = useSelector(authSelector)
 
   useEffect(() => {
-    dispatch(getCurrentUser(userInfo?._id))
-  }, [dispatch, userInfo?._id])
+    if (location.pathname !== '/login') {
+      dispatch(getCurrentUser(userInfo?._id))
+    }
+  }, [dispatch, location, userInfo?._id])
 
   return (
     <>
