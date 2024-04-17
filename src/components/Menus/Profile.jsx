@@ -1,12 +1,19 @@
 import { useState } from 'react'
 import { Avatar, Box, IconButton, Tooltip } from '@mui/material'
 import Menu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
+import MenuItem from '@mui/material/MenuItem'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import { Logout, PersonAdd, Settings } from '@mui/icons-material'
-function Profile() {
+import { Logout } from '@mui/icons-material'
+import { checkLength } from '~/utils/constanst'
+import { useSelector } from 'react-redux'
+import { authSelector } from '~/redux/auth/auth.selector'
+import withBaseLogic from '~/hoc'
+import { logout } from '~/redux/auth/auth.slice'
+// eslint-disable-next-line react-refresh/only-export-components
+function Profile({ dispatch, navigate }) {
   const [anchorEl, setAnchorEl] = useState(null)
+  const { userInfo } = useSelector(authSelector)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -27,8 +34,8 @@ function Profile() {
         >
           <Avatar
             sx={{ width: 34, height: 34 }}
-            src="https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-6/334494904_909968490428262_1880365116923209069_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=GxuY1GgGvXgAX9wppBp&_nc_ht=scontent.fdad3-4.fna&oh=00_AfBVgX3sElX8bCk6maZXyWFNvylZONsVleLFPr-dDNwW8g&oe=64B326FA"
-            alt="Quang Minh"
+            src={userInfo?.avatar}
+            alt={`${userInfo?.firstName} ${userInfo?.lastName}`}
           ></Avatar>
         </IconButton>
       </Tooltip>
@@ -41,22 +48,31 @@ function Profile() {
           'aria-labelledby': 'basic-button'
         }}
       >
-        <MenuItem onClick={handleClose}>Profile</MenuItem>
-        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={handleClose} sx={{ fontWeight: 'bold' }}>
+          Account
+        </MenuItem>
+        <MenuItem onClick={handleClose}>
+          <Avatar
+            sx={{ width: 34, height: 34 }}
+            src={userInfo?.avatar}
+            alt={`${userInfo?.firstName} ${userInfo?.lastName}`}
+          ></Avatar>
+          <Box>
+            <MenuItem onClick={handleClose} sx={{ pointerEvents: 'none' }}>
+              {`${userInfo?.firstName} ${userInfo?.lastName}`}
+            </MenuItem>
+            <Tooltip title={userInfo?.email} placement="top">
+              <MenuItem onClick={handleClose}>{checkLength(userInfo?.email)}</MenuItem>
+            </Tooltip>
+          </Box>
+        </MenuItem>
         <Divider />
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <PersonAdd fontSize="small" />
-          </ListItemIcon>
-          Add another account
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon>
-            <Settings fontSize="small" />
-          </ListItemIcon>
-          Settings
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
+
+        <MenuItem
+          onClick={() => {
+            dispatch(logout()), navigate('/login')
+          }}
+        >
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
@@ -67,4 +83,5 @@ function Profile() {
   )
 }
 
-export default Profile
+// eslint-disable-next-line react-refresh/only-export-components
+export default withBaseLogic(Profile)

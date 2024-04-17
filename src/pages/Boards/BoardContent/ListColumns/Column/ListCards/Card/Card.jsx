@@ -9,15 +9,17 @@ import CommentIcon from '@mui/icons-material/Comment'
 import AttachmentIcon from '@mui/icons-material/Attachment'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import { memo } from 'react'
+import { useState } from 'react'
+import CardDialog from '~/components/Dialog/CardDialog'
 
-function Card({ card, activeDragItemId }) {
+function Card({ card, activeDragItemId, editCardDetails }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: card._id,
     data: { ...card }
   })
-  const checkForcusCard = card._id === activeDragItemId
+  const [isShowDialog, setIsShowDialog] = useState(false)
 
+  const checkForcusCard = card._id === activeDragItemId
   const dntKitCardStyle = {
     transform: checkForcusCard ? 'rotate(4deg)' : CSS.Translate.toString(transform),
     transition,
@@ -29,20 +31,28 @@ function Card({ card, activeDragItemId }) {
     return !!card?.memberIds?.length || !!card?.coments?.length || !!card?.attachments?.length
   }
 
+  const handleEditCard = () => {
+    setIsShowDialog(true)
+  }
   return (
     <MuiCard
       ref={setNodeRef}
       style={dntKitCardStyle}
       {...attributes}
       {...listeners}
+      onClick={() => handleEditCard(card._id)}
       sx={{
         cursor: 'pointer',
         boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
         overflow: 'unset',
-        display: card?.FE_Placeholder ? 'none' : 'block'
+        display: card?.FE_Placeholder ? 'none' : 'block',
+        border: '1px solid transparent',
+        outline: 'none',
+        '&:hover': { borderColor: (theme) => theme.palette.primary.main }
       }}
     >
       {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} title="green iguana" />}
+
       <CardContent
         sx={{
           p: 1.5,
@@ -52,6 +62,14 @@ function Card({ card, activeDragItemId }) {
       >
         <Typography>{card?.title} </Typography>
       </CardContent>
+      {open && (
+        <CardDialog
+          isShowDialog={isShowDialog}
+          setIsShowDialog={setIsShowDialog}
+          card={card}
+          editCardDetails={editCardDetails}
+        />
+      )}
       {hideCardActions() && (
         <CardActions sx={{ p: '0 4px 8px 4px' }}>
           {!!card?.memberIds?.length && (
@@ -75,4 +93,4 @@ function Card({ card, activeDragItemId }) {
   )
 }
 
-export default memo(Card)
+export default Card
