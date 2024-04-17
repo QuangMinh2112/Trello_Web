@@ -16,7 +16,11 @@ function App({ dispatch, location }) {
   const { userInfo } = useSelector(authSelector)
 
   useEffect(() => {
-    if (location.pathname !== '/login') {
+    if (
+      location.pathname !== '/login' ||
+      location.pathname !== '/register' ||
+      location.pathname !== 'https://trello-web-quang-minh.vercel.app/login'
+    ) {
       dispatch(getCurrentUser(userInfo?._id))
     }
   }, [dispatch, location, userInfo?._id])
