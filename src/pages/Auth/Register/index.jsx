@@ -12,10 +12,11 @@ import bg from '~/assets/bg.jpg'
 import { useFormik } from 'formik'
 import { authRegisterSchema } from '~/Schemas/authSchema'
 import { NavLink } from 'react-router-dom'
+import { toast } from 'react-toastify'
 // eslint-disable-next-line react-refresh/only-export-components
 const Register = ({ navigate }) => {
   const [errorMessage, setErrorMessage] = useState('')
-
+  const [isLoading, setIsLoading] = useState(false)
   const formik = useFormik({
     initialValues: {
       firstName: '',
@@ -25,9 +26,12 @@ const Register = ({ navigate }) => {
     },
     validationSchema: authRegisterSchema,
     onSubmit: async (values) => {
+      setIsLoading(true)
       const response = await apiRegisterUser(values)
+      setIsLoading(false)
       if (response.message === 'Register successful!') {
         navigate('/login')
+        toast.success('Register successfully. Please login !')
       } else {
         setErrorMessage(response.message)
       }
@@ -229,8 +233,9 @@ const Register = ({ navigate }) => {
               variant="contained"
               sx={{ color: '#fff', background: '#1976d2', padding: '10px 16px' }}
               type="submit"
+              disabled={isLoading}
             >
-              Register
+              {isLoading ? 'Loading...' : 'Register'}
             </Button>
           </Box>
         </form>
