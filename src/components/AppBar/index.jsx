@@ -167,79 +167,81 @@ function AppBar({ navigate }) {
           }}
         >
           {notifications?.length > 0 ? (
-            notifications.map((notification, index) => [
-              <MenuItem key={notification?._id}>
-                <ListItemIcon>
-                  <GroupAddIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText>
-                  <Typography sx={{ paddingBottom: 1 }}>
+            notifications
+              ?.sort((a, b) => moment(b.createdAt) - moment(a.createdAt))
+              .map((notification, index) => [
+                <MenuItem key={notification?._id}>
+                  <ListItemIcon>
+                    <GroupAddIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText>
+                    <Typography sx={{ paddingBottom: 1 }}>
+                      <Typography variant="span" sx={{ fontWeight: 'bold' }}>
+                        {notification?.inviteerName ||
+                          notification?.inviterId[0]?.firstName + '' + notification?.inviterId[0]?.lastName}
+                      </Typography>{' '}
+                      had invited you to join the board
+                    </Typography>
                     <Typography variant="span" sx={{ fontWeight: 'bold' }}>
-                      {notification?.inviteerName ||
-                        notification?.inviterId[0]?.firstName + '' + notification?.inviterId[0]?.lastName}
-                    </Typography>{' '}
-                    had invited you to join the board
-                  </Typography>
-                  <Typography variant="span" sx={{ fontWeight: 'bold' }}>
-                    {notification?.boardName}
-                  </Typography>
+                      {notification?.boardName}
+                    </Typography>
 
-                  {notification?.status === 'pending' ? (
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'end', gap: 1, pb: 1 }}>
-                      <Button
-                        variant="contained"
-                        color="success"
-                        onClick={() =>
-                          handleConfirmNotification('accept', notification?._id, notification?.boardId[0]?._id)
-                        }
-                      >
-                        Accept
-                      </Button>
-                      <Button
-                        variant="outlined"
-                        color="error"
-                        onClick={() => handleConfirmNotification('reject', notification?._id)}
-                      >
-                        Reject
-                      </Button>
-                    </Box>
-                  ) : notification?.status === 'rejected' ? (
-                    <Box sx={{ display: 'flex', justifyContent: 'end', pb: 1 }}>
-                      <Chip icon={<NotInterestedIcon />} label="Rejected" />
-                    </Box>
-                  ) : notification?.status === 'accepted' ? (
-                    <Box sx={{ display: 'flex', justifyContent: 'end', pb: 1 }}>
-                      <Chip
-                        icon={
-                          <DoneIcon
-                            sx={{
-                              '&.MuiChip-icon': {
-                                color: 'white !important'
-                              }
-                            }}
-                          />
-                        }
-                        label="Accepted"
-                        color="success"
-                        sx={{
-                          '& .MuiChip-label': {
-                            color: 'white'
+                    {notification?.status === 'pending' ? (
+                      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'end', gap: 1, pb: 1 }}>
+                        <Button
+                          variant="contained"
+                          color="success"
+                          onClick={() =>
+                            handleConfirmNotification('accept', notification?._id, notification?.boardId[0]?._id)
                           }
-                        }}
-                      />
-                    </Box>
-                  ) : (
-                    <></>
-                  )}
+                        >
+                          Accept
+                        </Button>
+                        <Button
+                          variant="outlined"
+                          color="error"
+                          onClick={() => handleConfirmNotification('reject', notification?._id)}
+                        >
+                          Reject
+                        </Button>
+                      </Box>
+                    ) : notification?.status === 'rejected' ? (
+                      <Box sx={{ display: 'flex', justifyContent: 'end', pb: 1 }}>
+                        <Chip icon={<NotInterestedIcon />} label="Rejected" />
+                      </Box>
+                    ) : notification?.status === 'accepted' ? (
+                      <Box sx={{ display: 'flex', justifyContent: 'end', pb: 1 }}>
+                        <Chip
+                          icon={
+                            <DoneIcon
+                              sx={{
+                                '&.MuiChip-icon': {
+                                  color: 'white !important'
+                                }
+                              }}
+                            />
+                          }
+                          label="Accepted"
+                          color="success"
+                          sx={{
+                            '& .MuiChip-label': {
+                              color: 'white'
+                            }
+                          }}
+                        />
+                      </Box>
+                    ) : (
+                      <></>
+                    )}
 
-                  <Typography sx={{ textAlign: 'end', fontSize: '13px !important' }}>
-                    {' '}
-                    {moment(notification?.createdAt).format('ddd,MMM DD, YYYY h:mmA')}
-                  </Typography>
-                </ListItemText>
-              </MenuItem>,
-              index !== notifications.length - 1 && <Divider key={`divider-${notification?._id}`} />
-            ])
+                    <Typography sx={{ textAlign: 'end', fontSize: '13px !important' }}>
+                      {' '}
+                      {moment(notification?.createdAt).format('ddd,MMM DD, YYYY h:mmA')}
+                    </Typography>
+                  </ListItemText>
+                </MenuItem>,
+                index !== notifications.length - 1 && <Divider key={`divider-${notification?._id}`} />
+              ])
           ) : (
             <MenuItem>
               <ListItemText>No information (You have to create new board to receiver new board).</ListItemText>

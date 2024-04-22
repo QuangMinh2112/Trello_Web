@@ -47,38 +47,36 @@ function BoardBar({ board }) {
     setAnchorEl(anchorEl ? null : event.currentTarget)
   }
   const handleInviteUser = async () => {
-    if (userInfo?.email === inviteeEmail) {
-      toast.warning('You can not invite yourself')
-    }
     const boardName = board?.title
     const boardId = board?._id
     const inviteerName = userInfo?.firstName + ' ' + userInfo?.lastName
-
-    try {
-      const res = await sendInvitation({ email: inviteeEmail, boardId })
-      const invitationId = res?.data?._id
-      if (res?.success) {
-        toast.success('Send invitation successfully!!!')
-      } else {
-        toast.warning('Something went wrong')
+    if (userInfo?.email === inviteeEmail) {
+      toast.warning('You can not invite yourself')
+    } else {
+      try {
+        const res = await sendInvitation({ email: inviteeEmail, boardId })
+        const invitationId = res?.data?._id
+        if (res?.success) {
+          toast.success('Send invitation successfully!!!')
+        }
+        socket?.emit('sendNotification', {
+          inviteerEmail: userInfo?.email,
+          inviteeEmail,
+          boardName,
+          inviteerName,
+          status: 'pending',
+          invitationId
+        })
+      } catch (error) {
+        toast({
+          title: 'Error Occured!',
+          description: 'Failed to send the invitation',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+          position: 'bottom'
+        })
       }
-      socket?.emit('sendNotification', {
-        inviteerEmail: userInfo?.email,
-        inviteeEmail,
-        boardName,
-        inviteerName,
-        status: 'pending',
-        invitationId
-      })
-    } catch (error) {
-      toast({
-        title: 'Error Occured!',
-        description: 'Failed to send the invitation',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom'
-      })
     }
   }
   useEffect(() => {
