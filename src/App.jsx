@@ -12,18 +12,14 @@ import { authSelector } from './redux/auth/auth.selector'
 import PrivateRoute from './components/PrivateRouter'
 import Register from './pages/Auth/Register'
 
-function App({ dispatch, location }) {
+function App({ dispatch }) {
   const { userInfo } = useSelector(authSelector)
 
   useEffect(() => {
-    if (
-      location.pathname !== '/login' ||
-      location.pathname !== '/register' ||
-      location.pathname !== 'https://trello-web-quang-minh.vercel.app/login'
-    ) {
+    if (userInfo) {
       dispatch(getCurrentUser(userInfo?._id))
     }
-  }, [dispatch, location, userInfo?._id])
+  }, [dispatch, userInfo])
 
   return (
     <>
