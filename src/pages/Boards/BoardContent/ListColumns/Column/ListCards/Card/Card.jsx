@@ -28,68 +28,71 @@ function Card({ card, activeDragItemId, editCardDetails }) {
   }
 
   const hideCardActions = () => {
-    return !!card?.memberIds?.length || !!card?.coments?.length || !!card?.attachments?.length
+    return !!card?.memberIds?.length || !!card?.comments?.length || !!card?.attachments?.length
   }
 
   const handleEditCard = () => {
     setIsShowDialog(true)
   }
   return (
-    <MuiCard
-      ref={setNodeRef}
-      style={dntKitCardStyle}
-      {...attributes}
-      {...listeners}
-      onClick={() => handleEditCard(card._id)}
-      sx={{
-        cursor: 'pointer',
-        boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
-        overflow: 'unset',
-        display: card?.FE_Placeholder ? 'none' : 'block',
-        border: '1px solid transparent',
-        outline: 'none',
-        '&:hover': { borderColor: (theme) => theme.palette.primary.main }
-      }}
-    >
-      {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} title="green iguana" />}
-
-      <CardContent
-        sx={{
-          p: 1.5,
-          '&:last-child': { p: 1.5 },
-          overflow: 'unset'
-        }}
-      >
-        <Typography>{card?.title} </Typography>
-      </CardContent>
-      {open && (
+    <>
+      {isShowDialog && (
         <CardDialog
           isShowDialog={isShowDialog}
-          setIsShowDialog={setIsShowDialog}
+          onIsShowDialog={setIsShowDialog}
           card={card}
           editCardDetails={editCardDetails}
         />
       )}
-      {hideCardActions() && (
-        <CardActions sx={{ p: '0 4px 8px 4px' }}>
-          {!!card?.memberIds?.length && (
-            <Button startIcon={<GroupIcon />} size="small">
-              {card?.memberIds?.length}
-            </Button>
-          )}
-          {!!card?.coments?.length && (
-            <Button startIcon={<CommentIcon />} size="small">
-              {card?.coments?.length}
-            </Button>
-          )}
-          {!!card?.attachments?.length && (
-            <Button startIcon={<AttachmentIcon />} size="small">
-              {card?.attachments?.length}
-            </Button>
-          )}
-        </CardActions>
-      )}
-    </MuiCard>
+      <MuiCard
+        ref={setNodeRef}
+        style={dntKitCardStyle}
+        {...attributes}
+        {...listeners}
+        onClick={() => handleEditCard(card._id)}
+        sx={{
+          cursor: 'pointer',
+          boxShadow: '0 1px 1px rgba(0, 0, 0, 0.2)',
+          overflow: 'unset',
+          display: card?.FE_Placeholder ? 'none' : 'block',
+          border: '1px solid transparent',
+          outline: 'none',
+          '&:hover': { borderColor: (theme) => theme.palette.primary.main }
+        }}
+      >
+        {card?.cover && <CardMedia sx={{ height: 140 }} image={card?.cover} title="green iguana" />}
+
+        <CardContent
+          sx={{
+            p: 1.5,
+            '&:last-child': { p: 1.5 },
+            overflow: 'unset'
+          }}
+        >
+          <Typography>{card?.title} </Typography>
+        </CardContent>
+
+        {hideCardActions() && (
+          <CardActions sx={{ p: '0 4px 8px 4px' }}>
+            {!!card?.memberIds?.length && (
+              <Button startIcon={<GroupIcon />} size="small">
+                {card?.memberIds?.length}
+              </Button>
+            )}
+            {!!card?.comments?.length && (
+              <Button startIcon={<CommentIcon />} size="small">
+                {card?.comments?.length}
+              </Button>
+            )}
+            {!!card?.attachments?.length && (
+              <Button startIcon={<AttachmentIcon />} size="small">
+                {card?.attachments?.length}
+              </Button>
+            )}
+          </CardActions>
+        )}
+      </MuiCard>
+    </>
   )
 }
 

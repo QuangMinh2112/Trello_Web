@@ -8,24 +8,20 @@ import AddIcon from '@mui/icons-material/Add'
 
 export default function PowerUps() {
   return (
-    <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-    >
-      <ListItemButton sx={{ background: '#ebebeb', borderRadius: '5px', mb: 1 }}>
+    <List sx={{ width: '100%', maxWidth: 360 }} component="nav" aria-labelledby="nested-list-subheader">
+      <ListItemButton sx={{ borderRadius: '5px', mb: 1 }}>
         <ListItemIcon>
           <AspectRatioIcon />
         </ListItemIcon>
         <ListItemText primary="Card size" />
       </ListItemButton>
-      <ListItemButton sx={{ background: '#ebebeb', borderRadius: '5px', mb: 1 }}>
+      <ListItemButton sx={{ borderRadius: '5px', mb: 1 }}>
         <ListItemIcon>
           <AddToDriveIcon />
         </ListItemIcon>
         <ListItemText primary="Google Driver" />
       </ListItemButton>
-      <ListItemButton sx={{ background: '#ebebeb', borderRadius: '5px', mb: 1 }}>
+      <ListItemButton sx={{ borderRadius: '5px', mb: 1 }}>
         <ListItemIcon>
           <AddIcon />
         </ListItemIcon>

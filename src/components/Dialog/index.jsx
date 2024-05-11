@@ -18,6 +18,12 @@ import { getCurrentUser } from '~/redux/auth/auth.action'
 import { toast } from 'react-toastify'
 import { useFormik } from 'formik'
 import { BoardSchema } from '~/utils/validation'
+import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
+import IconButton from '@mui/material/IconButton'
+import AbcIcon from '@mui/icons-material/Abc'
+import CloseIcon from '@mui/icons-material/Close'
+import DescriptionIcon from '@mui/icons-material/Description'
+import { InputAdornment } from '@mui/material'
 
 export default function DialogCreateNewBoard({ isShowDialog, setIsShowDialog, currentUser }) {
   const { userInfo } = useSelector(authSelector)
@@ -56,18 +62,44 @@ export default function DialogCreateNewBoard({ isShowDialog, setIsShowDialog, cu
         aria-describedby="alert-dialog-description"
       >
         <form action="" onSubmit={formik.handleSubmit}>
-          <DialogTitle id="alert-dialog-title" sx={{ textAlign: 'center' }}>
-            {'CREATE BOARD'}
-          </DialogTitle>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <DialogTitle id="alert-dialog-title" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <LibraryAddIcon />
+              {'CREATE BOARD'}
+            </DialogTitle>
+            <Box sx={{ paddingRight: '10px' }}>
+              {' '}
+              <IconButton
+                sx={{
+                  borderRadius: '50%',
+                  background: 'red',
+                  '&.MuiIconButton-root': {
+                    padding: '2px'
+                  },
+                  color: 'white'
+                }}
+                onClick={handleClose}
+              >
+                <CloseIcon />
+              </IconButton>
+            </Box>
+          </Box>
           <DialogContent>
             {' '}
-            <Box sx={{ display: 'flex', flexDirection: 'column', width: '330px', gap: '5px', paddingBottom: 1 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', width: '500px', gap: '5px', paddingBottom: 1 }}>
               {' '}
               <label htmlFor="">Title board</label>
               <TextField
                 id="title"
                 name="title"
                 variant="outlined"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <AbcIcon />
+                    </InputAdornment>
+                  )
+                }}
                 sx={{
                   '& .MuiInputBase-input': {
                     padding: '10px 15px'
@@ -83,7 +115,7 @@ export default function DialogCreateNewBoard({ isShowDialog, setIsShowDialog, cu
                 helperText={formik.touched.title && formik.errors.title}
               />
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'column', width: '330px', gap: '5px', paddingBottom: 1 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', width: '500px', gap: '5px', paddingBottom: 1 }}>
               {' '}
               <label htmlFor="">Description</label>
               <TextField
@@ -92,11 +124,16 @@ export default function DialogCreateNewBoard({ isShowDialog, setIsShowDialog, cu
                     marginLeft: 0
                   }
                 }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <DescriptionIcon />
+                    </InputAdornment>
+                  )
+                }}
                 id="description"
                 variant="outlined"
                 name="description"
-                multiline
-                minRows={3}
                 value={formik.values.description}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
@@ -139,9 +176,6 @@ export default function DialogCreateNewBoard({ isShowDialog, setIsShowDialog, cu
           <DialogActions>
             <Button type="submit" variant="outlined">
               Create
-            </Button>
-            <Button onClick={handleClose} variant="outlined">
-              Cancel
             </Button>
           </DialogActions>
         </form>

@@ -1,1 +1,1 @@
-export const authSelector = (state) => state?.auth?.userInfo || {}
+export const authSelector = (state) => state?.auth || {}

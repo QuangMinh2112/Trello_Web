@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 import { authSelector } from '~/redux/auth/auth.selector'
 import withBaseLogic from '~/hoc'
 import { logout } from '~/redux/auth/auth.slice'
+import { NavLink } from 'react-router-dom'
 // eslint-disable-next-line react-refresh/only-export-components
 function Profile({ dispatch, navigate }) {
   const [anchorEl, setAnchorEl] = useState(null)
@@ -48,9 +49,14 @@ function Profile({ dispatch, navigate }) {
           'aria-labelledby': 'basic-button'
         }}
       >
-        <MenuItem onClick={handleClose} sx={{ fontWeight: 'bold' }}>
-          Account
-        </MenuItem>
+        <NavLink to="/setting/account">
+          <MenuItem
+            onClick={handleClose}
+            sx={{ fontWeight: 'bold', color: (theme) => (theme.palette.mode === 'dark' ? 'white' : 'black') }}
+          >
+            Account
+          </MenuItem>
+        </NavLink>
         <MenuItem onClick={handleClose}>
           <Avatar
             sx={{ width: 34, height: 34 }}

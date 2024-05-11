@@ -11,6 +11,7 @@ import { getCurrentUser } from './redux/auth/auth.action'
 import { authSelector } from './redux/auth/auth.selector'
 import PrivateRoute from './components/PrivateRouter'
 import Register from './pages/Auth/Register'
+import Account from './pages/Account'
 
 function App({ dispatch }) {
   const { userInfo } = useSelector(authSelector)
@@ -28,6 +29,7 @@ function App({ dispatch }) {
           <Route element={<PrivateRoute />}>
             <Route path="/" element={<Home />} />
             <Route path="/board/:id" element={<Board />} />
+            <Route path="/setting/account" element={<Account />} />
           </Route>
         </Route>
 

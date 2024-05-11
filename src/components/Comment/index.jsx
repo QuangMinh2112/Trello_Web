@@ -3,15 +3,13 @@ import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
+import moment from 'moment'
 
-const Comment = ({ value, createdAt, nameUser }) => {
+const Comment = ({ value, createdAt, nameUser, avatar }) => {
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, padding: '10px 0' }}>
       <Tooltip title="quangminh">
-        <Avatar
-          alt="Remy Sharp"
-          src="https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-6/334494904_909968490428262_1880365116923209069_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=GxuY1GgGvXgAX9wppBp&_nc_ht=scontent.fdad3-4.fna&oh=00_AfBVgX3sElX8bCk6maZXyWFNvylZONsVleLFPr-dDNwW8g&oe=64B326FA"
-        />
+        <Avatar alt="Remy Sharp" src={avatar} sx={{ marginTop: '20px' }} />
       </Tooltip>
       <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -24,7 +22,7 @@ const Comment = ({ value, createdAt, nameUser }) => {
               fontSize: '12px'
             }}
           >
-            {createdAt}
+            {moment(createdAt).format('ddd, MMM D, YYYY HH:mm')}
           </Typography>
         </Box>
         <TextField

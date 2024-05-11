@@ -1,7 +1,6 @@
 import * as React from 'react'
 import Button from '@mui/material/Button'
 import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import SubjectIcon from '@mui/icons-material/Subject'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -10,6 +9,7 @@ import CreditCardIcon from '@mui/icons-material/CreditCard'
 import Typography from '@mui/material/Typography'
 import EditNoteIcon from '@mui/icons-material/EditNote'
 import SaveIcon from '@mui/icons-material/Save'
+import CloseIcon from '@mui/icons-material/Close'
 import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
 import AvatarGroup from '@mui/material/AvatarGroup'
@@ -18,20 +18,23 @@ import TextField from '@mui/material/TextField'
 import MarkdownEditor from '../MarkdownEditor'
 import ActionListCard from './ListMenuCard'
 import Divider from '@mui/material/Divider'
+import IconButton from '@mui/material/IconButton'
 import PowerUps from './Power-Ups'
 import Actions from './Actions'
 import Comment from '../Comment'
-import { listComment } from '~/data/mock-data'
+import { useSelector } from 'react-redux'
+import { authSelector } from '~/redux/auth/auth.selector'
 
-const CardDialog = ({ isShowDialog, setIsShowDialog, card, editCardDetails }) => {
+const CardDialog = ({ isShowDialog, onIsShowDialog, card, editCardDetails }) => {
   const [editMarkdown, setEditMarkdown] = React.useState(false)
   const [editCardTitle, setEditCardTitle] = React.useState(false)
   const [editedCardTitle, setEditedCardTitle] = React.useState('')
-  const [listComments, setListComments] = React.useState(listComment)
+  const [avatar, setAvatar] = React.useState(null)
+  const { userInfo } = useSelector(authSelector)
   const [comment, setComment] = React.useState('')
   const cardTitleRef = React.useRef()
   const handleClose = () => {
-    setIsShowDialog(false)
+    onIsShowDialog(false)
   }
 
   const handleEditTitleCard = () => {
@@ -39,7 +42,9 @@ const CardDialog = ({ isShowDialog, setIsShowDialog, card, editCardDetails }) =>
   }
 
   const handleEditCardTitleWhenBlur = async (cardId) => {
-    editCardDetails(cardId, editedCardTitle)
+    if (editCardTitle) {
+      editCardDetails(cardId, editedCardTitle, 0)
+    }
 
     setEditCardTitle(false)
   }
@@ -56,17 +61,11 @@ const CardDialog = ({ isShowDialog, setIsShowDialog, card, editCardDetails }) =>
 
   const handleSubmitComment = (e) => {
     e.preventDefault()
-    const newComment = {
-      id: (listComments.length + 1).toString(),
-      name: 'Quang Minh',
-      userId: '123',
-      text: comment,
-      createdAt: '21/12/2002'
+    if (comment) {
+      editCardDetails(card._id, comment, 1)
     }
-    setListComments((prev) => [...prev, newComment])
     setComment('')
   }
-
   const handleChangeDescription = () => {
     setEditMarkdown(!editMarkdown)
   }
@@ -82,20 +81,36 @@ const CardDialog = ({ isShowDialog, setIsShowDialog, card, editCardDetails }) =>
         maxWidth="md"
         data-no-dnd="true"
       >
-        <Box sx={{ width: '100%', height: 300, padding: 2 }}>
-          <Box
-            component="img"
+        <Box sx={{ textAlign: 'end', padding: '5px 5px 0 0' }}>
+          <IconButton
             sx={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              borderRadius: 1
+              borderRadius: '50%',
+              background: 'red',
+              '&.MuiIconButton-root': {
+                padding: '2px'
+              },
+              color: 'white'
             }}
-            alt="The house from the offer."
-            src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
-          />
+            onClick={handleClose}
+          >
+            <CloseIcon />
+          </IconButton>
         </Box>
-
+        {card?.cover && (
+          <Box sx={{ width: '100%', height: 300, padding: 1 }}>
+            <Box
+              component="img"
+              sx={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                borderRadius: 1
+              }}
+              alt="The house from the offer."
+              src={avatar ? avatar : card?.cover}
+            />
+          </Box>
+        )}
         <DialogTitle
           id="alert-dialog-title"
           sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '70%' }}
@@ -212,7 +227,12 @@ const CardDialog = ({ isShowDialog, setIsShowDialog, card, editCardDetails }) =>
 
               {/* MarkdownEditor */}
               <Box>
-                <MarkdownEditor editMarkdown={editMarkdown} cardId={card._id} description={card.description} />
+                <MarkdownEditor
+                  editMarkdown={editMarkdown}
+                  cardId={card._id}
+                  description={card.description}
+                  editCardDetails={editCardDetails}
+                />
               </Box>
               <Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -225,10 +245,7 @@ const CardDialog = ({ isShowDialog, setIsShowDialog, card, editCardDetails }) =>
                 <form onSubmit={handleSubmitComment}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, padding: '10px 0' }}>
                     <Tooltip title="quangminh">
-                      <Avatar
-                        alt="Remy Sharp"
-                        src="https://scontent.fdad3-4.fna.fbcdn.net/v/t39.30808-6/334494904_909968490428262_1880365116923209069_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=GxuY1GgGvXgAX9wppBp&_nc_ht=scontent.fdad3-4.fna&oh=00_AfBVgX3sElX8bCk6maZXyWFNvylZONsVleLFPr-dDNwW8g&oe=64B326FA"
-                      />
+                      <Avatar alt="Avatar user" src={userInfo?.avatar} />
                     </Tooltip>
                     <TextField
                       id="outlined-basic"
@@ -246,18 +263,24 @@ const CardDialog = ({ isShowDialog, setIsShowDialog, card, editCardDetails }) =>
                   </Box>
                 </form>
                 {/* Render list comment */}
-                {listComments?.map((c) => (
-                  <React.Fragment key={c.id}>
-                    <Comment value={c.text} createdAt={c.createdAt} nameUser={c.name} />
-                  </React.Fragment>
-                ))}
+                {card?.comments?.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) &&
+                  card?.comments?.map((c, index) => (
+                    <React.Fragment key={index}>
+                      <Comment
+                        value={c?.content}
+                        createdAt={c?.createdAt}
+                        nameUser={c?.userDisplayname}
+                        avatar={c?.userAvatar}
+                      />
+                    </React.Fragment>
+                  ))}
               </Box>
             </Box>
           </Box>
           {/* right */}
           <Box sx={{ padding: '16px 0 16px 15px', width: '30%' }}>
             <Typography sx={{ color: '#06a0ff', fontWeight: '600', marginBottom: '5px' }}>Add to card</Typography>
-            <ActionListCard />
+            <ActionListCard onChangeAvatar={setAvatar} cardId={card._id} editCardDetails={editCardDetails} />
             <Divider />
             <Typography sx={{ color: '#06a0ff', fontWeight: '600', marginBottom: '5px', paddingTop: 1 }}>
               Power-Ups
@@ -270,9 +293,6 @@ const CardDialog = ({ isShowDialog, setIsShowDialog, card, editCardDetails }) =>
             <Actions />
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-        </DialogActions>
       </Dialog>
     </React.Fragment>
   )

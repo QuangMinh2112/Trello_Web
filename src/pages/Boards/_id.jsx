@@ -13,15 +13,20 @@ import {
   updateColumnDetailsAPI
 } from '~/apis'
 import { isEmpty } from 'lodash'
-import { generatePlaceholderCard } from '~/utils/constanst'
+import { capitalizedFirstLetter, generatePlaceholderCard } from '~/utils/constanst'
 import { toast } from 'react-toastify'
 import { mapOrder } from '~/utils/sorts'
 import { useParams } from 'react-router-dom'
 import Loading from '~/components/Loading'
+import { useSelector } from 'react-redux'
+import { authSelector } from '~/redux/auth/auth.selector'
+import MetaData from '~/components/MetaData'
 
 function Board() {
   const { id } = useParams()
   const [board, setBoard] = useState(null)
+  const { userInfo } = useSelector(authSelector)
+
   useEffect(() => {
     fetchBoardDetails(id).then((board) => {
       board.columns = mapOrder(board.columns, board.columnOrderIds, '_id')
@@ -129,15 +134,38 @@ function Board() {
     })
   }
 
-  const editCardDetails = async (cardId, newDataUpdate) => {
+  const editCardDetails = async (cardId, newDataUpdate, type) => {
     const newBoard = { ...board }
     const payload = {
       title: newDataUpdate
     }
     const foundCard = newBoard?.columns?.flatMap((column) => column.cards).find((card) => card._id === cardId)
-    if (foundCard.title !== newDataUpdate) {
+    let today = new Date()
+    if (foundCard.title !== newDataUpdate && type === 0) {
       foundCard.title = newDataUpdate
       await updateCardDetail(cardId, payload)
+      setBoard(newBoard)
+    }
+    const pl = {
+      content: newDataUpdate,
+      userId: userInfo?._id,
+      userDisplayname: userInfo?.firstName + ' ' + userInfo?.lastName,
+      userAvatar: userInfo?.avatar,
+      createdAt: today.toString()
+    }
+    if (type === 1) {
+      foundCard.comments.push(pl)
+      await updateCardDetail(cardId, { comments: [pl] })
+      setBoard(newBoard)
+    }
+    if (type === 3) {
+      foundCard.description = newDataUpdate.description
+      await updateCardDetail(cardId, newDataUpdate)
+      setBoard(newBoard)
+    }
+    if (type === 4) {
+      foundCard.cover = newDataUpdate
+      setBoard(newBoard)
     }
   }
 
@@ -146,6 +174,7 @@ function Board() {
   }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+      <MetaData title={capitalizedFirstLetter(board?.title)} />
       <BoardBar board={board} />
       <BoardContent
         board={board}

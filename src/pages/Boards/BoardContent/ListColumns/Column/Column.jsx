@@ -45,6 +45,7 @@ function Column({ column, createdNewCard, deleteColumn, editCardDetails }) {
   const [editedTitle, setEditedTitle] = useState('')
   const [titleCard, setTitleCard] = useState('')
   const columnTitleRef = useRef()
+  const titleCardRef = useRef()
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm)
 
   const handleClick = (event) => {
@@ -54,8 +55,8 @@ function Column({ column, createdNewCard, deleteColumn, editCardDetails }) {
     setAnchorEl(null)
   }
   const handleAddNewCard = async () => {
-    if (!titleCard) {
-      toast.error('Please enter title card !', { position: 'bottom-left' })
+    if (titleCard.length < 3 || titleCard.length > 50) {
+      toast.error('Title card must be between 3 and 50 characters long!', { position: 'bottom-left' })
     } else {
       const newCardData = {
         title: titleCard,
@@ -86,6 +87,12 @@ function Column({ column, createdNewCard, deleteColumn, editCardDetails }) {
       columnTitleRef.current.focus()
     }
   }, [editColumn])
+
+  useEffect(() => {
+    if (openNewCardForm) {
+      titleCardRef.current.focus()
+    }
+  }, [openNewCardForm])
 
   useEffect(() => {
     setEditedTitle(column?.title)
@@ -269,13 +276,14 @@ function Column({ column, createdNewCard, deleteColumn, editCardDetails }) {
           ) : (
             <Box sx={{ display: 'flex', gap: 1 }}>
               <TextField
-                label="Enter column title"
+                label="Enter card title"
                 type="text"
                 size="small"
                 variant="outlined"
                 data-no-dnd="true"
                 value={titleCard}
                 onChange={(e) => setTitleCard(e.target.value)}
+                inputRef={(input) => (titleCardRef.current = input)}
                 autoFocus
                 sx={{
                   minWidth: '120px',

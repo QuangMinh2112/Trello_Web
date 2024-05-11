@@ -13,6 +13,7 @@ import { login } from '~/redux/auth/auth.slice'
 import { useFormik } from 'formik'
 import { authLoginSchema } from '~/Schemas/authSchema'
 import { NavLink } from 'react-router-dom'
+import MetaData from '~/components/MetaData'
 // eslint-disable-next-line react-refresh/only-export-components
 const Login = ({ navigate, dispatch }) => {
   const [errorMessage, setErrorMessage] = useState('')
@@ -27,6 +28,7 @@ const Login = ({ navigate, dispatch }) => {
     onSubmit: async (values) => {
       setLoading(true)
       const response = await apiLoginUser(values)
+
       setLoading(false)
       if (response.message === 'Login successful!') {
         dispatch(
@@ -44,160 +46,163 @@ const Login = ({ navigate, dispatch }) => {
   })
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100vw',
-        height: '100vh',
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: 'cover',
-        backgroundImage: `url(${bg})`
-      }}
-    >
+    <>
+      <MetaData title="Login" />
       <Box
         sx={{
-          width: '400px',
-          padding: '32px 24px 24px',
-          borderRadius: '6px',
-          background: '#fff',
           display: 'flex',
-          flexDirection: 'column',
-          gap: 2,
-          color: (theme) => (theme.palette.mode === 'dark' ? 'black' : '#fff')
+          justifyContent: 'center',
+          alignItems: 'center',
+          width: '100vw',
+          height: '100vh',
+          backgroundRepeat: 'no-repeat',
+          backgroundSize: 'cover',
+          backgroundImage: `url(${bg})`
         }}
       >
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '45px',
-              height: '45px',
-              borderRadius: '50%',
-              background: '#1976d2'
-            }}
-          >
-            <LockOpenOutlinedIcon sx={{ color: 'white' }} />
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              width: '45px',
-              height: '45px',
-              borderRadius: '50%',
-              background: '#1976d2'
-            }}
-          >
-            <SvgIcon component={TrelloIcon} fontSize="small" inheritViewBox sx={{ color: 'white' }} />
-          </Box>
-        </Box>
         <Box
           sx={{
-            textAlign: 'center',
-            color: 'black'
+            width: '400px',
+            padding: '32px 24px 24px',
+            borderRadius: '6px',
+            background: '#fff',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            color: (theme) => (theme.palette.mode === 'dark' ? 'black' : '#fff')
           }}
         >
-          Author: QuangMinhDev
-        </Box>
-
-        {/* Show alert error */}
-        {errorMessage && (
-          <Alert variant="filled" severity="error" sx={{ color: '#fff' }}>
-            {errorMessage}
-          </Alert>
-        )}
-
-        <form onSubmit={formik.handleSubmit}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 1 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '45px',
+                height: '45px',
+                borderRadius: '50%',
+                background: '#1976d2'
+              }}
+            >
+              <LockOpenOutlinedIcon sx={{ color: 'white' }} />
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '45px',
+                height: '45px',
+                borderRadius: '50%',
+                background: '#1976d2'
+              }}
+            >
+              <SvgIcon component={TrelloIcon} fontSize="small" inheritViewBox sx={{ color: 'white' }} />
+            </Box>
+          </Box>
           <Box
             sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 2
+              textAlign: 'center',
+              color: 'black'
             }}
           >
-            <TextField
-              id="email"
-              variant="outlined"
-              placeholder="Enter your email"
-              label="Email"
+            Author: QuangMinhDev
+          </Box>
+
+          {/* Show alert error */}
+          {errorMessage && (
+            <Alert variant="filled" severity="error" sx={{ color: '#fff' }}>
+              {errorMessage}
+            </Alert>
+          )}
+
+          <form onSubmit={formik.handleSubmit}>
+            <Box
               sx={{
-                width: '100%',
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: '#ccc'
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#ccc'
-                  }
-                },
-                '& .MuiFormHelperText-root': {
-                  marginLeft: 0
-                },
-                '& .MuiOutlinedInput-input': {
-                  color: 'black'
-                }
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2
               }}
-              value={formik.values.email}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.email && Boolean(formik.errors.email)}
-              helperText={formik.touched.email && formik.errors.email}
-            />
-            <TextField
-              id="password"
-              variant="outlined"
-              label="Password"
-              placeholder="Enter your password"
-              type="password"
-              sx={{
-                width: '100%',
-                color: 'black',
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: '#ccc'
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#ccc'
-                  }
-                },
-                '& .MuiOutlinedInput-input': {
-                  color: 'black'
-                },
-                '& .MuiFormHelperText-root': {
-                  marginLeft: 0
-                }
-              }}
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              error={formik.touched.password && Boolean(formik.errors.password)}
-              helperText={formik.touched.password && formik.errors.password}
-            />
-            <Button
-              variant="contained"
-              sx={{ color: '#fff', background: '#1976d2', padding: '10px 16px' }}
-              type="submit"
-              disabled={loading}
             >
-              {loading ? 'Loading...' : 'Login'}
-            </Button>
+              <TextField
+                id="email"
+                variant="outlined"
+                placeholder="Enter your email"
+                label="Email"
+                sx={{
+                  width: '100%',
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#ccc'
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#ccc'
+                    }
+                  },
+                  '& .MuiFormHelperText-root': {
+                    marginLeft: 0
+                  },
+                  '& .MuiOutlinedInput-input': {
+                    color: 'black'
+                  }
+                }}
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+              />
+              <TextField
+                id="password"
+                variant="outlined"
+                label="Password"
+                placeholder="Enter your password"
+                type="password"
+                sx={{
+                  width: '100%',
+                  color: 'black',
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#ccc'
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#ccc'
+                    }
+                  },
+                  '& .MuiOutlinedInput-input': {
+                    color: 'black'
+                  },
+                  '& .MuiFormHelperText-root': {
+                    marginLeft: 0
+                  }
+                }}
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                error={formik.touched.password && Boolean(formik.errors.password)}
+                helperText={formik.touched.password && formik.errors.password}
+              />
+              <Button
+                variant="contained"
+                sx={{ color: '#fff', background: '#1976d2', padding: '10px 16px' }}
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? 'Loading...' : 'Login'}
+              </Button>
+            </Box>
+          </form>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
+            <Box component="span" sx={{ color: 'black' }}>
+              Do not have an account.?
+            </Box>
+            <NavLink to="/register" style={{ color: 'red' }}>
+              Register Now!
+            </NavLink>
           </Box>
-        </form>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1 }}>
-          <Box component="span" sx={{ color: 'black' }}>
-            Do not have an account.?
-          </Box>
-          <NavLink to="/register" style={{ color: 'red' }}>
-            Register Now!
-          </NavLink>
         </Box>
       </Box>
-    </Box>
+    </>
   )
 }
 

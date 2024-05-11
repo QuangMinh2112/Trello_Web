@@ -9,36 +9,32 @@ import UnarchiveIcon from '@mui/icons-material/Unarchive'
 import ShareIcon from '@mui/icons-material/Share'
 export default function Actions() {
   return (
-    <List
-      sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}
-      component="nav"
-      aria-labelledby="nested-list-subheader"
-    >
-      <ListItemButton sx={{ background: '#ebebeb', borderRadius: '5px', mb: 1 }}>
+    <List sx={{ width: '100%', maxWidth: 360 }} component="nav" aria-labelledby="nested-list-subheader">
+      <ListItemButton sx={{ borderRadius: '5px', mb: 1 }}>
         <ListItemIcon>
           <ArrowForwardIcon />
         </ListItemIcon>
         <ListItemText primary="Move" />
       </ListItemButton>
-      <ListItemButton sx={{ background: '#ebebeb', borderRadius: '5px', mb: 1 }}>
+      <ListItemButton sx={{ borderRadius: '5px', mb: 1 }}>
         <ListItemIcon>
           <ContentCopyIcon />
         </ListItemIcon>
         <ListItemText primary="Copy" />
       </ListItemButton>
-      <ListItemButton sx={{ background: '#ebebeb', borderRadius: '5px', mb: 1 }}>
+      <ListItemButton sx={{ borderRadius: '5px', mb: 1 }}>
         <ListItemIcon>
           <AutoAwesomeIcon />
         </ListItemIcon>
         <ListItemText primary="Make Template" />
       </ListItemButton>
-      <ListItemButton sx={{ background: '#ebebeb', borderRadius: '5px', mb: 1 }}>
+      <ListItemButton sx={{ borderRadius: '5px', mb: 1 }}>
         <ListItemIcon>
           <UnarchiveIcon />
         </ListItemIcon>
         <ListItemText primary="Archive" />
       </ListItemButton>
-      <ListItemButton sx={{ background: '#ebebeb', borderRadius: '5px', mb: 1 }}>
+      <ListItemButton sx={{ borderRadius: '5px', mb: 1 }}>
         <ListItemIcon>
           <ShareIcon />
         </ListItemIcon>

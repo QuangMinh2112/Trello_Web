@@ -63,6 +63,7 @@ function BoardBar({ board }) {
           inviteerEmail: userInfo?.email,
           inviteeEmail,
           boardName,
+          boardId,
           inviteerName,
           status: 'pending',
           invitationId

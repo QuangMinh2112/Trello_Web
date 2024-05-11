@@ -191,9 +191,7 @@ function AppBar({ navigate }) {
                         <Button
                           variant="contained"
                           color="success"
-                          onClick={() =>
-                            handleConfirmNotification('accept', notification?._id, notification?.boardId[0]?._id)
-                          }
+                          onClick={() => handleConfirmNotification('accept', notification?._id, notification?.boardId)}
                         >
                           Accept
                         </Button>
@@ -248,7 +246,7 @@ function AppBar({ navigate }) {
             </MenuItem>
           )}
         </Menu>
-        <Tooltip title="Helper" sx={{ cursor: 'pointer', color: 'white' }}>
+        <Tooltip title="Help" sx={{ cursor: 'pointer', color: 'white' }}>
           <HelpOutlineIcon />
         </Tooltip>
         <Profile />
