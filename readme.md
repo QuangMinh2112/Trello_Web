@@ -19,6 +19,50 @@ manage their work.
 
 ## Demo:
 
-1. Login and register users interface
+**1. Login and register users interface**
 
-![Register](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/login.png)
+- Login page
+
+![Login](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/login.png)
+
+- Register page
+
+![Register](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/register.png)
+
+**2. Home page**
+
+![HomePage](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/home.png)
+
+**3.Create _new board_ and after create _new board_**
+
+- Create board
+
+![NewBoard](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/createNewBoard.png)
+
+- After create board
+
+![AfterCreateNewBoard](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/AfterCreaterNewBoard.png)
+
+**4. Board detail page**
+
+![BoardDetail](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/BoardDetail.png)
+
+**5. Create column, card and edit card detail**
+
+- Create column
+
+![CreateColumn](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/CreateColumn.png)
+
+- Add card to column
+
+![CreateCard](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/AddCard.png)
+
+- Edit card detail
+
+![EditCard](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/EditCardDetail.png)
+
+Note: In the edit card functionality, only the option to add a cover to the card has been updated.
+
+- Add cover to card
+
+![AddCover](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/AddCoverToCard.png)
