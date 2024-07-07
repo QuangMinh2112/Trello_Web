@@ -21,4 +21,4 @@ manage their work.
 
 1. Login and register users interface
 
-![Register](./images/example.jpg)
+![Register](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/login.png)
