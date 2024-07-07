@@ -69,7 +69,19 @@ Note: In the edit card functionality, only the option to add a cover to the card
 
 Note:Additionally, you can edit the information of a column or delete a column.
 
-**6. Change infomation, security page**
+**6. Invitation user in system**
+
+- Send invitation to test1@gmail.com
+
+Note that the user must exist within the system.
+
+![Invitation](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/invitation.png)
+
+![InvitationReceive](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/invitationReceive.png)
+
+Note: Users have two options: either decline or accept. If they accept, they will join the board that Nguyen Do Quang Minh invited them to; if they decline, they will not join that board.
+
+**7. Change infomation, security page**
 
 - Change infomation
 
