@@ -66,3 +66,27 @@ Note: In the edit card functionality, only the option to add a cover to the card
 - Add cover to card
 
 ![AddCover](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/AddCoverToCard.png)
+
+Note:Additionally, you can edit the information of a column or delete a column.
+
+**6. Change infomation, security page**
+
+- Change infomation
+
+![ChangeInfo](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/changeInfo.png)
+
+- Change password
+
+![ChangePassword](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/changePassword.png)
+
+**Options**
+
+Note: Additionally, you can use dark mode theme to customize interface, like below.
+
+![Option1](https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/option1.png)
+
+![Option2](<https://github.com/QuangMinh2112/Trello_Web/blob/master/src/assets/images/option2%20(1).png>)
+
+---
+
+## Thank you !
